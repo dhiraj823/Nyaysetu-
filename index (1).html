@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NyaySetu – Bridge to Justice</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F5F7; --surface:#FFFFFF; --ink:#12202E; --muted:#52606D; --line:#D3DCE3;
+  --primary:#164E7A; --on-primary:#FFFFFF; --accent:#D97F0B; --danger:#C0272D; --on-danger:#fff;
+  --tint:#E6EEF4; --focus:#D97F0B; --bw:1px;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1721; --surface:#152431; --ink:#E8EEF3; --muted:#9FB0BF; --line:#2B3E4E;
+    --primary:#7DBBEB; --on-primary:#08141E; --accent:#F2A640; --danger:#E5484D; --tint:#1B2E3D; --focus:#F2A640;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1721; --surface:#152431; --ink:#E8EEF3; --muted:#9FB0BF; --line:#2B3E4E;
+  --primary:#7DBBEB; --on-primary:#08141E; --accent:#F2A640; --danger:#E5484D; --tint:#1B2E3D; --focus:#F2A640;
+}
+:root[data-contrast="high"]{
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#000000; --muted:#1A1A1A; --line:#000000;
+  --primary:#00325C; --on-primary:#FFFFFF; --accent:#8A4B00; --danger:#9B0000; --tint:#EDEDED; --focus:#0000EE; --bw:2px;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-contrast="high"]:not([data-theme="light"]){
+    --bg:#000; --surface:#000; --ink:#FFFFFF; --muted:#EDEDED; --line:#FFFFFF;
+    --primary:#FFE14D; --on-primary:#000; --accent:#FFB347; --danger:#FF7B7B; --tint:#111; --focus:#4DD2FF; --bw:2px;
+  }
+}
+:root[data-contrast="high"][data-theme="dark"]{
+  --bg:#000; --surface:#000; --ink:#FFFFFF; --muted:#EDEDED; --line:#FFFFFF;
+  --primary:#FFE14D; --on-primary:#000; --accent:#FFB347; --danger:#FF7B7B; --tint:#111; --focus:#4DD2FF; --bw:2px;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--ink);
+  font-family:"Mukta","Noto Sans Devanagari",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  font-size:17px;line-height:1.55;padding-bottom:84px}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--primary)}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.wrap{max-width:760px;margin:0 auto;padding:0 18px}
+
+/* header */
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:var(--bw) solid var(--line)}
+header.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;height:56px}
+.brand{display:flex;flex-direction:column;line-height:1.1;cursor:pointer;background:none;border:0;padding:0;text-align:left}
+.brand b{font-size:22px;font-weight:800;letter-spacing:-.01em;color:var(--primary)}
+.brand small{font-size:12px;color:var(--muted)}
+.ctl{display:flex;gap:6px}
+.ctl button{min-width:44px;height:40px;border:var(--bw) solid var(--line);background:var(--surface);border-radius:8px;cursor:pointer;font-weight:700;font-size:15px}
+.ctl button[aria-pressed="true"]{background:var(--primary);color:var(--on-primary);border-color:var(--primary)}
+
+/* hero */
+.hero{padding:30px 0 22px;position:relative}
+.hero h1{font-size:clamp(32px,8.5vw,52px);line-height:1.05;margin:0 0 12px;font-weight:800;letter-spacing:-.02em;max-width:14em}
+.hero p.lede{margin:0 0 18px;color:var(--muted);max-width:34em}
+.bridge{display:block;width:100%;height:auto;margin:6px 0 0;color:var(--primary)}
+.ask{background:var(--surface);border:var(--bw) solid var(--line);border-radius:12px;padding:12px}
+.ask label{display:block;font-weight:700;margin-bottom:6px}
+.ask textarea{width:100%;min-height:76px;resize:vertical;border:var(--bw) solid var(--line);border-radius:8px;background:var(--bg);padding:10px;font-size:17px}
+.row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 18px;border-radius:8px;border:var(--bw) solid var(--primary);background:var(--primary);color:var(--on-primary);font-weight:700;cursor:pointer;text-decoration:none}
+.btn.alt{background:transparent;color:var(--primary)}
+.btn.danger{background:var(--danger);border-color:var(--danger);color:var(--on-danger)}
+.btn.sm{min-height:36px;padding:0 12px;font-size:15px}
+.chip{border:var(--bw) solid var(--line);background:var(--surface);border-radius:999px;padding:5px 12px;font-size:15px;cursor:pointer}
+.stats{display:flex;gap:22px;margin:20px 0 0;color:var(--muted);font-size:15px;flex-wrap:wrap}
+.stats b{color:var(--ink);font-size:20px;margin-right:4px}
+
+h2{font-size:24px;line-height:1.2;margin:30px 0 10px;font-weight:800;letter-spacing:-.01em}
+h3{font-size:18px;margin:22px 0 6px;font-weight:700}
+.sub{color:var(--muted);margin:0 0 12px}
+
+/* index list */
+.index{list-style:none;margin:0;padding:0;border-top:var(--bw) solid var(--line)}
+.index li{border-bottom:var(--bw) solid var(--line)}
+.index button{display:flex;width:100%;align-items:center;justify-content:space-between;gap:12px;text-align:left;background:none;border:0;padding:14px 2px;cursor:pointer}
+.index .t{font-weight:700;font-size:18px;display:block}
+.index .d{color:var(--muted);font-size:15px;display:block}
+.index .go{font-size:22px;color:var(--primary);flex:none}
+.match{border-left:6px solid var(--accent);padding-left:12px;margin:0 0 6px}
+
+/* detail */
+.back{background:none;border:0;color:var(--primary);font-weight:700;padding:14px 0 0;cursor:pointer;font-size:16px}
+.detail h1{font-size:clamp(28px,7vw,40px);line-height:1.1;margin:8px 0 6px;font-weight:800;letter-spacing:-.015em}
+.law{background:var(--tint);border-radius:8px;padding:10px 12px;font-size:15px}
+.block ul,.block ol{margin:0;padding-left:22px}
+.block li{margin:0 0 8px}
+.helps{display:flex;flex-wrap:wrap;gap:8px}
+.helps a{display:inline-flex;align-items:center;gap:8px;border:var(--bw) solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px;text-decoration:none;color:var(--ink)}
+.helps a b{color:var(--primary);font-size:19px}
+.helps a span{font-size:14px;color:var(--muted)}
+
+/* emergency */
+.sos{border:var(--bw) solid var(--line);border-left:8px solid var(--danger);background:var(--surface);border-radius:10px;padding:16px;margin:16px 0}
+.hl{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+@media (min-width:600px){.hl{grid-template-columns:repeat(3,1fr)}}
+.hl a{display:block;border:var(--bw) solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-decoration:none;color:var(--ink)}
+.hl a b{display:block;font-size:26px;line-height:1.1;color:var(--primary);font-weight:800}
+.hl a span{font-size:14px;color:var(--muted);display:block;line-height:1.3}
+.hl a.main{grid-column:1/-1;background:var(--danger);border-color:var(--danger)}
+.hl a.main b,.hl a.main span{color:var(--on-danger)}
+.field{display:block;margin:0 0 12px}
+.field>span{display:block;font-weight:600;margin-bottom:4px;font-size:15px}
+.field input,.field textarea,.field select{width:100%;border:var(--bw) solid var(--line);border-radius:8px;background:var(--surface);padding:9px 10px;min-height:44px}
+.field textarea{min-height:92px;resize:vertical}
+.check{display:flex;gap:10px;align-items:flex-start;margin:0 0 12px}
+.check input{width:22px;height:22px;margin-top:3px}
+.two{display:grid;grid-template-columns:1fr;gap:0 12px}
+@media (min-width:600px){.two{grid-template-columns:1fr 1fr}}
+.contact{display:flex;justify-content:space-between;align-items:center;gap:8px;border-bottom:var(--bw) solid var(--line);padding:8px 0;flex-wrap:wrap}
+.status{margin:10px 0 0;color:var(--muted);font-size:15px}
+.msgbox{background:var(--bg);border:var(--bw) dashed var(--line);border-radius:8px;padding:10px;white-space:pre-wrap;word-break:break-word;font-size:15px;margin-top:10px}
+
+/* documents */
+.seg{display:flex;border:var(--bw) solid var(--primary);border-radius:8px;overflow:hidden;margin:6px 0 16px}
+.seg button{flex:1;min-height:44px;background:transparent;border:0;font-weight:700;color:var(--primary);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--primary);color:var(--on-primary)}
+.doc-paper{background:#fff;color:#000;border:1px solid #bbb;border-radius:4px;padding:22px 20px;font-family:"Noto Serif Devanagari","Noto Serif",Georgia,"Times New Roman",serif;font-size:16px;line-height:1.55;white-space:pre-wrap;word-break:break-word;overflow-x:auto}
+.note{font-size:14px;color:var(--muted)}
+
+/* courts */
+.ladder{list-style:none;padding:0;margin:0;border-left:4px solid var(--primary)}
+.ladder li{padding:0 0 12px 14px;position:relative}
+.ladder li b{display:block}
+.links a{display:block;padding:10px 0;border-bottom:var(--bw) solid var(--line);text-decoration:none;font-weight:600}
+.links a span{display:block;font-weight:400;color:var(--muted);font-size:14px}
+.search{width:100%;border:var(--bw) solid var(--line);border-radius:8px;background:var(--surface);padding:10px;min-height:44px;margin-bottom:6px}
+
+footer.foot{margin-top:40px;padding:18px 0 10px;border-top:var(--bw) solid var(--line);color:var(--muted);font-size:14px}
+
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:var(--bw) solid var(--line);padding-bottom:env(safe-area-inset-bottom,0px)}
+nav.tabs .in{max-width:760px;margin:0 auto;display:grid;grid-template-columns:repeat(5,1fr)}
+nav.tabs button{background:none;border:0;min-height:56px;padding:6px 2px;font-size:13px;line-height:1.15;font-weight:600;color:var(--muted);cursor:pointer;border-top:4px solid transparent}
+nav.tabs button[aria-current="page"]{color:var(--primary);border-top-color:var(--primary)}
+nav.tabs button.sosb{color:var(--danger)}
+nav.tabs button.sosb[aria-current="page"]{border-top-color:var(--danger);color:var(--danger)}
+
+@media (prefers-reduced-motion:no-preference){
+  .bridge path.arc{stroke-dasharray:900;stroke-dashoffset:900;animation:draw 1.6s ease-out .2s forwards}
+}
+@keyframes draw{to{stroke-dashoffset:0}}
+
+@media print{
+  body{background:#fff;padding:0}
+  .noprint{display:none!important}
+  .doc-paper{border:0;padding:0;font-size:12pt}
+  :root{padding:0}
+}
+</style>
+</head>
+<body>
+<header class="top noprint"><div class="wrap">
+  <button class="brand" data-act="home" aria-label="NyaySetu home"><b>NyaySetu</b><small id="tag"></small></button>
+  <div class="ctl">
+    <button data-act="lang" id="b-lang" aria-label="Language"></button>
+    <button data-act="theme" id="b-theme" aria-label="Dark mode" aria-pressed="false">◐</button>
+    <button data-act="contrast" id="b-hc" aria-label="High contrast" aria-pressed="false">Aa</button>
+  </div>
+</div></header>
+
+<main class="wrap" id="main"></main>
+
+<nav class="tabs noprint" aria-label="Main"><div class="in" id="tabs"></div></nav>
+
+<script>
+/* ---------- storage (private to this browser) ---------- */
+const store={
+  get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}},
+  set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+};
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+/* ---------- helplines (10) ---------- */
+const HELP={
+ "112":{en:"All emergencies (police, fire, ambulance)",hi:"सभी आपात स्थितियाँ (पुलिस, फायर, एम्बुलेंस)"},
+ "100":{en:"Police",hi:"पुलिस"},
+ "101":{en:"Fire brigade",hi:"फायर ब्रिगेड"},
+ "108":{en:"Ambulance",hi:"एम्बुलेंस"},
+ "181":{en:"Women helpline",hi:"महिला हेल्पलाइन"},
+ "1098":{en:"Childline",hi:"चाइल्डलाइन"},
+ "1930":{en:"Cyber crime helpline",hi:"साइबर अपराध हेल्पलाइन"},
+ "1915":{en:"National consumer helpline",hi:"राष्ट्रीय उपभोक्ता हेल्पलाइन"},
+ "15100":{en:"NALSA free legal aid",hi:"नालसा निःशुल्क कानूनी सहायता"},
+ "14567":{en:"Elderline (senior citizens)",hi:"एल्डरलाइन (वरिष्ठ नागरिक)"}
+};
+
+/* ---------- 11 legal categories (rule-based curated content) ---------- */
+const CATS=[
+{id:"fir",help:["112","100","15100"],kw:["fir","police","complaint","station","refuse","thana","एफआईआर","पुलिस","थाना","शिकायत","रिपोर्ट"],
+ en:{title:"Police won’t register my FIR",desc:"Police refuse or delay taking your complaint.",
+  rights:["For a serious (cognizable) offence, police must register an FIR. They cannot tell you to “come back later”.","You can file a Zero FIR at any police station, whatever the area. Many states also allow online e-FIR.","You get a free copy of the FIR and can ask the officer to read it back to you."],
+  law:"BNSS 2023 Section 173 (earlier CrPC 154); Article 21; Lalita Kumari v. State of U.P. (2014).",
+  steps:["Go to the nearest police station with a written complaint (date, place, what happened, who was involved). Keep a signed copy with a receiving stamp.","If refused, send the complaint by post or email to the Superintendent of Police (SP) of the district (Section 173(4)).","Still no FIR? Apply to the Magistrate to order registration (Section 175(3) BNSS), or complain on your state police portal or 112.","Note the name or badge number of each officer and the time of each visit."],
+  docs:["Written complaint (2 copies)","ID proof","Evidence: photos, messages, medical report"]},
+ hi:{title:"पुलिस मेरी एफआईआर दर्ज नहीं कर रही",desc:"पुलिस शिकायत लेने से मना कर रही है या देरी कर रही है।",
+  rights:["गंभीर (संज्ञेय) अपराध में पुलिस को एफआईआर दर्ज करनी ही होती है। वे “बाद में आना” नहीं कह सकते।","आप किसी भी थाने में, इलाका कोई भी हो, ज़ीरो एफआईआर करा सकते हैं। कई राज्यों में ऑनलाइन ई-एफआईआर भी होती है।","एफआईआर की प्रति मुफ़्त मिलती है और आप अधिकारी से शिकायत पढ़कर सुनाने को कह सकते हैं।"],
+  law:"बीएनएसएस 2023 धारा 173 (पहले सीआरपीसी 154); अनुच्छेद 21; ललिता कुमारी बनाम उत्तर प्रदेश (2014)।",
+  steps:["अपनी लिखित शिकायत (तारीख, जगह, घटना, शामिल लोग) लेकर नज़दीकी थाने जाएँ। प्राप्ति की मुहर वाली हस्ताक्षरित प्रति रखें।","मना करने पर शिकायत डाक या ईमेल से ज़िले के पुलिस अधीक्षक (SP) को भेजें (धारा 173(4))।","फिर भी एफआईआर न हो तो मजिस्ट्रेट से दर्ज करने का आदेश माँगें (बीएनएसएस धारा 175(3)), या राज्य पुलिस पोर्टल / 112 पर शिकायत करें।","हर अधिकारी का नाम या बैज नंबर और हर बार का समय नोट करें।"],
+  docs:["लिखित शिकायत (2 प्रतियाँ)","पहचान पत्र","सबूत: फोटो, संदेश, मेडिकल रिपोर्ट"]}},
+
+{id:"wages",doc:"notice",help:["15100"],kw:["salary","wage","wages","pay","unpaid","employer","job","paid","vetan","tankhwah","वेतन","सैलरी","तनख्वाह","मज़दूरी","मजदूरी","नौकरी","मालिक"],
+ en:{title:"Salary or wages not paid",desc:"Your employer is withholding or delaying your pay.",
+  rights:["Wages must be paid on time, usually by the 7th–10th of the next month.","An employer cannot make illegal deductions from your pay.","When you leave or are removed, dues must be settled promptly (the Code on Wages, 2019 says within two working days).","You can complain to the Labour Department free of cost."],
+  law:"Payment of Wages Act, 1936 / Code on Wages, 2019; Minimum Wages law.",
+  steps:["Collect proof: appointment letter, payslips, bank statements, attendance, chats or emails about salary.","Send a written demand (email and post) giving 7–15 days to pay. Use the Legal Notice generator.","Complain to the Labour Inspector / Labour Commissioner of your state (many have online portals).","For larger claims, go to the Labour Court or ask the DLSA for free legal aid."],
+  docs:["Appointment letter or proof of work","Payslips and bank statements","Copy of your written demand"]},
+ hi:{title:"वेतन / मज़दूरी नहीं मिल रही",desc:"नियोक्ता आपकी तनख्वाह रोक रहा है या टाल रहा है।",
+  rights:["वेतन समय पर मिलना चाहिए, आमतौर पर अगले महीने की 7 से 10 तारीख तक।","नियोक्ता वेतन से गैरकानूनी कटौती नहीं कर सकता।","नौकरी छोड़ने या निकाले जाने पर बकाया जल्दी चुकाना होता है (वेतन संहिता, 2019 में दो कार्य-दिवस)।","आप श्रम विभाग में निःशुल्क शिकायत कर सकते हैं।"],
+  law:"वेतन भुगतान अधिनियम, 1936 / वेतन संहिता, 2019; न्यूनतम मज़दूरी कानून।",
+  steps:["सबूत जुटाएँ: नियुक्ति पत्र, सैलरी स्लिप, बैंक स्टेटमेंट, हाज़िरी, वेतन पर चैट या ईमेल।","लिखित माँग (ईमेल और डाक) भेजें और भुगतान के लिए 7–15 दिन दें। इसके लिए कानूनी नोटिस जनरेटर इस्तेमाल करें।","अपने राज्य के श्रम निरीक्षक / श्रम आयुक्त को शिकायत करें (कई राज्यों में ऑनलाइन पोर्टल है)।","बड़ी रकम के लिए श्रम न्यायालय जाएँ या DLSA से निःशुल्क कानूनी सहायता लें।"],
+  docs:["नियुक्ति पत्र या काम का सबूत","सैलरी स्लिप और बैंक स्टेटमेंट","भेजी गई माँग की प्रति"]}},
+
+{id:"cyber",help:["1930","112","100"],kw:["cyber","online","fraud","scam","upi","otp","hacked","hack","phishing","bank","money","cheat","whatsapp","instagram","link","साइबर","ठगी","धोखाधड़ी","ऑनलाइन","हैक","ओटीपी","पैसे","फ्रॉड"],
+ en:{title:"Cyber fraud or online scam",desc:"Money lost, account hacked, or cheated online.",
+  rights:["You can report online fraud any time, but the first few hours matter most; banks can freeze money faster.","You can file the complaint online without going to a police station.","Banks must act on reports of unauthorised transactions, and reporting quickly limits your liability under RBI rules."],
+  law:"IT Act, 2000 (S.66C, 66D); BNS 2023 S.318 (cheating).",
+  steps:["Call 1930 right away. Give amount, date, transaction ID (UTR) and account details.","Report on cybercrime.gov.in and note the acknowledgement number.","Call your bank to block the card, UPI or account and get a written complaint number.","Save screenshots, numbers, links and chats. Never share OTP or PIN with anyone.","Change passwords of affected accounts. File an FIR if the police ask for it."],
+  docs:["Transaction details / bank statement","Screenshots and chat history","ID proof and phone number of the fraudster"]},
+ hi:{title:"साइबर ठगी या ऑनलाइन धोखाधड़ी",desc:"पैसे कट गए, अकाउंट हैक हुआ, या ऑनलाइन ठगी हुई।",
+  rights:["आप ऑनलाइन ठगी की शिकायत कभी भी कर सकते हैं, पर शुरुआती कुछ घंटे सबसे ज़रूरी हैं; बैंक पैसे जल्दी रोक सकता है।","शिकायत थाने गए बिना ऑनलाइन दर्ज की जा सकती है।","बिना अनुमति वाले लेन-देन की सूचना पर बैंक को कार्रवाई करनी होती है, और जल्दी बताने से आपकी ज़िम्मेदारी सीमित रहती है (आरबीआई नियम)।"],
+  law:"आईटी अधिनियम, 2000 (धारा 66C, 66D); बीएनएस 2023 धारा 318 (धोखाधड़ी)।",
+  steps:["तुरंत 1930 पर कॉल करें। रकम, तारीख, ट्रांज़ैक्शन आईडी (UTR) और खाते की जानकारी दें।","cybercrime.gov.in पर शिकायत करें और पावती (acknowledgement) नंबर नोट करें।","बैंक को कॉल करके कार्ड, UPI या खाता ब्लॉक कराएँ और लिखित शिकायत नंबर लें।","स्क्रीनशॉट, नंबर, लिंक और चैट सुरक्षित रखें। OTP या PIN किसी को न बताएँ।","प्रभावित खातों के पासवर्ड बदलें। पुलिस माँगे तो एफआईआर दर्ज कराएँ।"],
+  docs:["लेन-देन का विवरण / बैंक स्टेटमेंट","स्क्रीनशॉट और चैट","ठग का फोन नंबर / खाता विवरण"]}},
+
+{id:"consumer",doc:"notice",help:["1915"],kw:["consumer","product","refund","defective","warranty","replacement","shop","seller","service","amazon","flipkart","order","bill","उपभोक्ता","रिफंड","खराब","सामान","दुकान","वारंटी"],
+ en:{title:"Consumer dispute",desc:"Defective product, bad service, overcharging or no refund.",
+  rights:["You can claim refund, replacement, repair or compensation for defective goods, deficient service or unfair trade practice.","You can file online (e-Daakhil) from home. A lawyer is not compulsory.","No court fee for claims up to ₹5 lakh.","File within 2 years of the problem arising."],
+  law:"Consumer Protection Act, 2019.",
+  steps:["Keep the bill, warranty, payment proof, photos and chats with the seller.","Complain to the seller or company in writing, and register at the National Consumer Helpline (1915 or consumerhelpline.gov.in).","Send a legal notice giving 15–30 days to fix it. Use the Legal Notice generator.","File at the District Consumer Commission through e-Daakhil. District: up to ₹50 lakh; State: ₹50 lakh–₹2 crore; National: above ₹2 crore."],
+  docs:["Bill / invoice and warranty card","Payment proof","Photos, emails and chats"]},
+ hi:{title:"उपभोक्ता विवाद",desc:"खराब सामान, खराब सेवा, ज़्यादा वसूली या रिफंड न मिलना।",
+  rights:["खराब सामान, कमी वाली सेवा या अनुचित व्यापार व्यवहार पर आप रिफंड, बदली, मरम्मत या मुआवज़ा माँग सकते हैं।","आप घर से ऑनलाइन (ई-दाखिल) शिकायत कर सकते हैं। वकील ज़रूरी नहीं है।","₹5 लाख तक के दावों पर कोर्ट फीस नहीं लगती।","समस्या होने के 2 साल के भीतर शिकायत करें।"],
+  law:"उपभोक्ता संरक्षण अधिनियम, 2019।",
+  steps:["बिल, वारंटी, भुगतान का सबूत, फोटो और विक्रेता से चैट सुरक्षित रखें।","विक्रेता या कंपनी को लिखित शिकायत दें और राष्ट्रीय उपभोक्ता हेल्पलाइन (1915 या consumerhelpline.gov.in) पर दर्ज करें।","15–30 दिन की समय-सीमा देते हुए कानूनी नोटिस भेजें। इसके लिए कानूनी नोटिस जनरेटर इस्तेमाल करें।","ई-दाखिल से ज़िला उपभोक्ता आयोग में शिकायत करें। ज़िला: ₹50 लाख तक; राज्य: ₹50 लाख–₹2 करोड़; राष्ट्रीय: ₹2 करोड़ से ऊपर।"],
+  docs:["बिल / इनवॉइस और वारंटी कार्ड","भुगतान का सबूत","फोटो, ईमेल और चैट"]}},
+
+{id:"dv",help:["181","112","100"],kw:["domestic","husband","wife","dowry","beat","abuse","violence","in-laws","marriage","घरेलू","पति","दहेज","मारपीट","हिंसा","ससुराल","प्रताड़ना"],
+ en:{title:"Domestic violence",desc:"Abuse or cruelty at home by a partner or relatives.",
+  rights:["Domestic violence includes physical, emotional, sexual, verbal and economic abuse, not only beating.","You can ask for a protection order, the right to stay in the shared home, monetary relief and child custody.","You can seek help even if you are in a live-in relationship.","Free legal aid and shelter are available to women."],
+  law:"Protection of Women from Domestic Violence Act, 2005; BNS 2023 S.85–86 (cruelty by husband or relatives).",
+  steps:["If you are in danger, call 112 or the Women Helpline 181 now.","Contact the Protection Officer or the nearest One Stop Centre (Sakhi) for shelter, medical care and filing help.","Get a medical examination and keep the report. Save photos, messages and a record of each incident.","Apply to the Magistrate for protection, residence or monetary relief. The DLSA gives free legal aid."],
+  docs:["Medical report","Photos / messages / call records","ID proof and marriage or relationship proof"]},
+ hi:{title:"घरेलू हिंसा",desc:"घर में पति/साथी या रिश्तेदारों द्वारा मारपीट या क्रूरता।",
+  rights:["घरेलू हिंसा में शारीरिक, भावनात्मक, यौन, मौखिक और आर्थिक शोषण शामिल है, सिर्फ़ मारपीट नहीं।","आप सुरक्षा आदेश, साझा घर में रहने का अधिकार, आर्थिक सहायता और बच्चों की अभिरक्षा माँग सकती हैं।","लिव-इन संबंध में भी आप मदद माँग सकती हैं।","महिलाओं को निःशुल्क कानूनी सहायता और आश्रय मिलता है।"],
+  law:"घरेलू हिंसा से महिलाओं का संरक्षण अधिनियम, 2005; बीएनएस 2023 धारा 85–86 (पति या रिश्तेदारों की क्रूरता)।",
+  steps:["खतरे में हों तो अभी 112 या महिला हेल्पलाइन 181 पर कॉल करें।","आश्रय, इलाज और शिकायत में मदद के लिए संरक्षण अधिकारी या नज़दीकी वन स्टॉप सेंटर (सखी) से मिलें।","मेडिकल जाँच कराएँ और रिपोर्ट रखें। फोटो, संदेश और हर घटना का रिकॉर्ड सुरक्षित रखें।","मजिस्ट्रेट को सुरक्षा, निवास या आर्थिक राहत का आवेदन दें। DLSA निःशुल्क कानूनी सहायता देता है।"],
+  docs:["मेडिकल रिपोर्ट","फोटो / संदेश / कॉल रिकॉर्ड","पहचान पत्र और विवाह या संबंध का प्रमाण"]}},
+
+{id:"tenant",doc:"notice",help:["15100","100"],kw:["rent","tenant","landlord","evict","eviction","deposit","lease","house owner","मकान मालिक","किराया","किरायेदार","जमा राशि","खाली"],
+ en:{title:"Rent and landlord problems",desc:"Eviction, deposit not returned, or unfair rent demands.",
+  rights:["A landlord cannot throw you out, lock you out or cut water and electricity without legal process.","You can ask for a written rent agreement and receipts for rent and deposit.","The security deposit must be returned after you vacate, after lawful deductions.","Rules differ by state. Check your state’s Rent Control Act or Model Tenancy law."],
+  law:"State Rent Control Acts; Transfer of Property Act, 1882 (S.106); Model Tenancy Act, 2021 where adopted.",
+  steps:["Keep the rent agreement, receipts and bank transfers. Take dated photos of the property condition.","Reply to any eviction or demand in writing. Do not sign blank papers.","Send a legal notice for refund of the deposit with a deadline. Use the generator.","If it continues, approach the Rent Authority or civil court, or the DLSA for free advice."],
+  docs:["Rent agreement","Rent receipts / bank transfers","Photos of the property at move-in and move-out"]},
+ hi:{title:"किराया और मकान मालिक की समस्या",desc:"बेदखली, जमा राशि न लौटाना या अनुचित किराया माँग।",
+  rights:["मकान मालिक कानूनी प्रक्रिया के बिना आपको निकाल नहीं सकता, ताला नहीं लगा सकता, या पानी-बिजली नहीं काट सकता।","आप लिखित किराया समझौता और किराए व जमा राशि की रसीद माँग सकते हैं।","मकान खाली करने पर वैध कटौती के बाद सिक्योरिटी डिपॉज़िट लौटाना होता है।","नियम राज्य के अनुसार अलग हैं। अपने राज्य का किराया नियंत्रण कानून या मॉडल टेनेंसी कानून देखें।"],
+  law:"राज्य किराया नियंत्रण अधिनियम; संपत्ति अंतरण अधिनियम, 1882 (धारा 106); मॉडल टेनेंसी अधिनियम, 2021 (जहाँ लागू)।",
+  steps:["किराया समझौता, रसीदें और बैंक ट्रांसफर रखें। संपत्ति की स्थिति की तारीख वाली फोटो लें।","बेदखली या किसी माँग का जवाब लिखित में दें। कोरे कागज़ पर हस्ताक्षर न करें।","जमा राशि लौटाने के लिए समय-सीमा के साथ कानूनी नोटिस भेजें। जनरेटर इस्तेमाल करें।","समस्या बनी रहे तो किराया प्राधिकरण या सिविल कोर्ट जाएँ, या निःशुल्क सलाह के लिए DLSA से मिलें।"],
+  docs:["किराया समझौता","किराया रसीदें / बैंक ट्रांसफर","मकान में आने और जाने के समय की फोटो"]}},
+
+{id:"arrest",help:["112","15100","100"],kw:["arrest","arrested","custody","bail","detain","lockup","jail","गिरफ्तार","हिरासत","जमानत","ज़मानत","लॉकअप"],
+ en:{title:"Arrest and bail rights",desc:"You or someone you know has been arrested or detained.",
+  rights:["You must be told the reason for the arrest, and your family or a friend must be informed.","You must be produced before a Magistrate within 24 hours, excluding travel time.","You have the right to meet a lawyer, and free legal aid if you cannot afford one.","You cannot be tortured or made to sign blank papers. In bailable offences, bail is a right.","A woman should not be arrested after sunset and before sunrise, except with a Magistrate’s written permission."],
+  law:"Constitution Art. 20–22, 39A; BNSS 2023 (S.47, 48, 58, 478); D.K. Basu v. State of W.B. (1997).",
+  steps:["Stay calm and do not resist. Ask the officer’s name and the reason for arrest.","Ask the police to inform a family member or friend. Share a lawyer’s or DLSA number.","Ask for a lawyer. If you cannot afford one, tell the Magistrate you want free legal aid.","Tell the Magistrate about any injury or ill-treatment and ask for a medical examination."],
+  docs:["Copy of arrest memo","ID proof","Lawyer’s or DLSA contact"]},
+ hi:{title:"गिरफ्तारी और ज़मानत के अधिकार",desc:"आप या आपके किसी जानने वाले को गिरफ्तार या हिरासत में लिया गया है।",
+  rights:["गिरफ्तारी का कारण बताया जाना चाहिए और आपके परिवार या मित्र को सूचित किया जाना चाहिए।","यात्रा का समय छोड़कर 24 घंटे के भीतर आपको मजिस्ट्रेट के सामने पेश करना होगा।","आपको वकील से मिलने का अधिकार है, और खर्च न उठा सकें तो निःशुल्क कानूनी सहायता मिलती है।","आपको यातना नहीं दी जा सकती और कोरे कागज़ पर हस्ताक्षर नहीं कराए जा सकते। जमानती अपराध में ज़मानत अधिकार है।","महिला को सूर्यास्त के बाद और सूर्योदय से पहले गिरफ्तार नहीं किया जाना चाहिए, सिवाय मजिस्ट्रेट की लिखित अनुमति के।"],
+  law:"संविधान अनुच्छेद 20–22, 39A; बीएनएसएस 2023 (धारा 47, 48, 58, 478); डी.के. बसु बनाम पश्चिम बंगाल (1997)।",
+  steps:["शांत रहें और विरोध न करें। अधिकारी का नाम और गिरफ्तारी का कारण पूछें।","पुलिस से परिवार या मित्र को सूचना देने को कहें। वकील या DLSA का नंबर दें।","वकील माँगें। खर्च न उठा सकें तो मजिस्ट्रेट से निःशुल्क कानूनी सहायता माँगें।","चोट या बुरे बर्ताव के बारे में मजिस्ट्रेट को बताएँ और मेडिकल जाँच माँगें।"],
+  docs:["गिरफ्तारी मेमो की प्रति","पहचान पत्र","वकील या DLSA का संपर्क"]}},
+
+{id:"posh",help:["181","112"],kw:["harass","harassment","workplace","office","molest","sexual","posh","छेड़छाड़","उत्पीड़न","दफ्तर","ऑफिस","यौन"],
+ en:{title:"Sexual harassment at work",desc:"Unwelcome behaviour, advances or threats at your workplace.",
+  rights:["Every workplace with 10 or more employees must have an Internal Committee (IC) for such complaints.","You can complain within 3 months of the incident (extendable by up to 3 more months).","Your identity and the complaint must be kept confidential, and you cannot be punished for complaining.","If the workplace is small, complain to the district Local Committee."],
+  law:"Sexual Harassment of Women at Workplace (POSH) Act, 2013; BNS 2023 S.75.",
+  steps:["Write down what happened: dates, places, witnesses, messages or emails.","Submit a written complaint to the Internal Committee (or Local Committee) and ask for an acknowledgement.","You can also use the SHe-Box portal of the Ministry of Women and Child Development.","If you feel unsafe, call 181 or 112. You may also file a police complaint."],
+  docs:["Written complaint","Messages, emails, call records","Names of witnesses"]},
+ hi:{title:"कार्यस्थल पर यौन उत्पीड़न",desc:"काम की जगह पर अनचाहा व्यवहार, प्रस्ताव या धमकी।",
+  rights:["10 या अधिक कर्मचारियों वाले हर कार्यस्थल में ऐसी शिकायतों के लिए आंतरिक समिति (IC) होनी चाहिए।","घटना के 3 महीने के भीतर शिकायत करें (अधिकतम 3 महीने और बढ़ सकते हैं)।","आपकी पहचान और शिकायत गोपनीय रहनी चाहिए, और शिकायत के लिए आपको सज़ा नहीं दी जा सकती।","छोटे कार्यस्थल में ज़िले की स्थानीय समिति में शिकायत करें।"],
+  law:"कार्यस्थल पर महिलाओं का यौन उत्पीड़न (POSH) अधिनियम, 2013; बीएनएस 2023 धारा 75।",
+  steps:["क्या हुआ लिख लें: तारीख, जगह, गवाह, संदेश या ईमेल।","आंतरिक समिति (या स्थानीय समिति) को लिखित शिकायत दें और पावती माँगें।","आप महिला एवं बाल विकास मंत्रालय के SHe-Box पोर्टल का भी उपयोग कर सकती हैं।","असुरक्षित लगे तो 181 या 112 पर कॉल करें। आप पुलिस में भी शिकायत कर सकती हैं।"],
+  docs:["लिखित शिकायत","संदेश, ईमेल, कॉल रिकॉर्ड","गवाहों के नाम"]}},
+
+{id:"accident",help:["112","108","100"],kw:["accident","crash","hit","vehicle","injured","road","insurance","car","bike","truck","दुर्घटना","एक्सीडेंट","टक्कर","घायल","बीमा","गाड़ी"],
+ en:{title:"Road accident",desc:"You or someone else was hurt in a road accident.",
+  rights:["A bystander who helps an injured person (a Good Samaritan) is protected and need not give personal details.","Hospitals must give emergency first aid without waiting for payment or police formalities.","Victims or families can claim compensation from the Motor Accident Claims Tribunal. Hit-and-run victims have a government compensation scheme."],
+  law:"Motor Vehicles Act, 1988 (S.134A, 166); BNS 2023 S.106, 281.",
+  steps:["Call 112 or 108 and get the injured person to hospital quickly.","Note the vehicle number, take photos and collect witness details.","File an FIR at the nearest police station and keep a copy.","Inform the insurer and file a claim with the Motor Accident Claims Tribunal. A lawyer or DLSA can help."],
+  docs:["FIR copy","Medical bills and reports","Vehicle, licence and insurance details"]},
+ hi:{title:"सड़क दुर्घटना",desc:"आप या कोई और सड़क दुर्घटना में घायल हुआ है।",
+  rights:["घायल की मदद करने वाले राहगीर (गुड सेमेरिटन) को सुरक्षा मिलती है और उसे निजी जानकारी देना ज़रूरी नहीं।","अस्पताल को भुगतान या पुलिस कार्रवाई का इंतज़ार किए बिना आपातकालीन प्राथमिक उपचार देना होता है।","पीड़ित या परिवार मोटर दुर्घटना दावा अधिकरण से मुआवज़ा माँग सकते हैं। हिट-एंड-रन पीड़ितों के लिए सरकारी मुआवज़ा योजना है।"],
+  law:"मोटर वाहन अधिनियम, 1988 (धारा 134A, 166); बीएनएस 2023 धारा 106, 281।",
+  steps:["112 या 108 पर कॉल करें और घायल को जल्दी अस्पताल पहुँचाएँ।","गाड़ी का नंबर नोट करें, फोटो लें और गवाहों की जानकारी जुटाएँ।","नज़दीकी थाने में एफआईआर दर्ज कराएँ और प्रति रखें।","बीमा कंपनी को सूचित करें और मोटर दुर्घटना दावा अधिकरण में दावा करें। वकील या DLSA मदद कर सकते हैं।"],
+  docs:["एफआईआर की प्रति","इलाज के बिल और रिपोर्ट","गाड़ी, लाइसेंस और बीमा का विवरण"]}},
+
+{id:"property",doc:"notice",help:["15100","100"],kw:["property","land","plot","flat","possession","encroach","registry","mutation","inheritance","will","ancestral","ज़मीन","जमीन","प्लॉट","कब्ज़ा","कब्जा","रजिस्ट्री","संपत्ति","मकान","विरासत"],
+ en:{title:"Property or land dispute",desc:"Illegal possession, unclear ownership or a family property fight.",
+  rights:["You can check ownership yourself: sale deed, mutation (name entry), land records and encumbrance certificate.","A sale of immovable property worth ₹100 or more must be registered to be valid proof of transfer.","Nobody can take possession of your property without due legal process.","Disputes can be settled through mediation or Lok Adalat, which is free and faster than court."],
+  law:"Transfer of Property Act, 1882; Registration Act, 1908; Specific Relief Act, 1963; Limitation Act, 1963.",
+  steps:["Collect documents: sale deed, tax receipts, mutation, survey/khasra records, encumbrance certificate.","Send a written notice to the other party asking them to stop interfering or to settle.","Report trespass or threats to the police. For civil rights, consult a lawyer about a civil suit or injunction.","Try mediation or Lok Adalat first. Apply to the DLSA for free aid if eligible."],
+  docs:["Sale deed / title documents","Tax receipts and mutation records","Survey map / khasra, encumbrance certificate"]},
+ hi:{title:"संपत्ति या ज़मीन का विवाद",desc:"अवैध कब्ज़ा, मालिकाना हक़ पर संदेह या पारिवारिक संपत्ति विवाद।",
+  rights:["आप खुद मालिकाना हक़ जाँच सकते हैं: बिक्री विलेख, दाखिल-खारिज (नामांतरण), भू-अभिलेख और भार-मुक्ति प्रमाणपत्र।","₹100 या उससे अधिक की अचल संपत्ति की बिक्री का पंजीकरण होना चाहिए, तभी वह हस्तांतरण का वैध प्रमाण है।","कानूनी प्रक्रिया के बिना कोई आपकी संपत्ति पर कब्ज़ा नहीं कर सकता।","विवाद मध्यस्थता या लोक अदालत से निपट सकते हैं, जो मुफ़्त और कोर्ट से तेज़ है।"],
+  law:"संपत्ति अंतरण अधिनियम, 1882; पंजीकरण अधिनियम, 1908; विनिर्दिष्ट अनुतोष अधिनियम, 1963; परिसीमा अधिनियम, 1963।",
+  steps:["दस्तावेज़ जुटाएँ: बिक्री विलेख, कर रसीदें, नामांतरण, सर्वे/खसरा रिकॉर्ड, भार-मुक्ति प्रमाणपत्र।","दूसरे पक्ष को लिखित नोटिस भेजकर दखल रोकने या समझौते के लिए कहें।","अतिक्रमण या धमकी की सूचना पुलिस को दें। दीवानी अधिकारों के लिए सिविल वाद या स्थगन आदेश पर वकील से सलाह लें।","पहले मध्यस्थता या लोक अदालत आज़माएँ। पात्र हों तो DLSA से निःशुल्क सहायता लें।"],
+  docs:["बिक्री विलेख / स्वामित्व दस्तावेज़","कर रसीदें और नामांतरण रिकॉर्ड","सर्वे नक्शा / खसरा, भार-मुक्ति प्रमाणपत्र"]}},
+
+{id:"legalaid",help:["15100"],kw:["lawyer","afford","free legal","legal aid","nalsa","dlsa","advocate","poor","वकील","मुफ्त","निःशुल्क","कानूनी सहायता","गरीब"],
+ en:{title:"Free legal aid (can’t afford a lawyer)",desc:"Get a lawyer and court help at no cost.",
+  rights:["Free legal services are a right under Article 39A, not charity.","Eligible: women, children, SC/ST, persons in custody, persons with disabilities, victims of trafficking or disasters, industrial workers, and people below the state’s income limit.","You get a lawyer, court fees and documents at no cost."],
+  law:"Legal Services Authorities Act, 1987; Constitution Art. 39A.",
+  steps:["Call NALSA on 15100 or visit the District Legal Services Authority (DLSA) at your district court.","Carry ID, income or category proof (if needed) and papers about your case.","Fill a short application. The DLSA assigns a panel lawyer.","You can also try Tele-Law through Common Service Centres for advice by phone or video."],
+  docs:["ID proof","Income / category certificate","Case papers"]},
+ hi:{title:"निःशुल्क कानूनी सहायता (वकील का खर्च नहीं उठा सकते)",desc:"बिना खर्च के वकील और अदालती मदद पाएँ।",
+  rights:["निःशुल्क कानूनी सहायता अनुच्छेद 39A के तहत अधिकार है, दान नहीं।","पात्र: महिलाएँ, बच्चे, अनुसूचित जाति/जनजाति, हिरासत में लोग, दिव्यांग, मानव तस्करी या आपदा के पीड़ित, औद्योगिक कामगार, और राज्य की आय-सीमा से नीचे के लोग।","आपको वकील, कोर्ट फीस और दस्तावेज़ बिना खर्च के मिलते हैं।"],
+  law:"विधिक सेवा प्राधिकरण अधिनियम, 1987; संविधान अनुच्छेद 39A।",
+  steps:["नालसा के 15100 पर कॉल करें या अपने ज़िला न्यायालय में ज़िला विधिक सेवा प्राधिकरण (DLSA) जाएँ।","पहचान पत्र, आय या श्रेणी प्रमाण (ज़रूरत हो तो) और केस के कागज़ साथ रखें।","छोटा आवेदन भरें। DLSA पैनल वकील नियुक्त करता है।","फोन या वीडियो पर सलाह के लिए कॉमन सर्विस सेंटर के ज़रिए टेली-लॉ भी आज़मा सकते हैं।"],
+  docs:["पहचान पत्र","आय / श्रेणी प्रमाणपत्र","केस के कागज़"]}}
+];
+
+/* ---------- UI text ---------- */
+const U={
+ en:{tag:"Bridge to Justice",
+  h1:"Know your rights. Know your next step.",
+  lede:"Describe what happened in your own words. NyaySetu shows your rights, what to do, who to call and the papers to prepare. Free, private, in English and Hindi.",
+  askL:"What happened?",askP:"Example: my employer has not paid my salary for 3 months",find:"Find guidance",
+  eg:["Police are not taking my FIR","Salary not paid","Money lost in UPI fraud"],
+  stCat:"legal issue categories",stHelp:"national helplines",stDoc:"document generators",
+  matches:"Best matches for your problem",nomatch:"We could not match that. Pick the closest topic below.",browse:"Browse all issues",
+  back:"← All issues",rights:"Your rights",law:"The law, in simple words",steps:"What to do",docs:"Keep these ready",call:"Call for help",
+  mkNotice:"Prepare a legal notice",
+  tabs:["Rights","Emergency","Documents","Legal aid","About"],
+  emTitle:"Emergency help",emSub:"Tap a number to call. These are free, 24×7 national numbers.",
+  sosT:"SOS with live location",sosD:"Sends your location link to the trusted contacts you save below.",
+  sosGo:"Get my location and prepare SOS",sosLoc:"Getting your location…",sosOk:"Location found. Tap a contact to send.",
+  sosFail:"Location is not available (permission denied or blocked). The message below is ready without it.",
+  sosMsg:"EMERGENCY! I need help. My location: ",sosNoLoc:"EMERGENCY! I need help. I could not share my location, please call me.",
+  sosSig:" (sent via NyaySetu)",
+  tcT:"Trusted contacts",tcSub:"Saved only on this device. Up to 5.",nm:"Name",ph:"Phone number",add:"Add contact",del:"Remove",
+  noC:"No contacts yet. Add one to use SOS.",sms:"SMS",wa:"WhatsApp",share:"Share…",copy:"Copy message",copied:"Copied",
+  docsT:"Generate a document",docsSub:"Fill the form. The draft updates as you type. Nothing leaves your device.",
+  rti:"RTI application",notice:"Legal notice",dlang:"Document language",
+  save:"Save as PDF",copyDoc:"Copy text",pdfHint:"In the print window, choose “Save as PDF” as the destination.",printFail:"Printing is blocked here. Use Copy text and paste it into a document.",
+  draft:"Draft preview",
+  courtsT:"Courts and free legal aid",courtsSub:"Which court handles what, and where free legal help starts.",
+  whichCourt:"Which court?",ladder:"Free legal aid: where to go",official:"Official websites",filter:"Filter websites…",
+  aboutT:"About NyaySetu",
+  disc:"General information, not legal advice. Laws change, so confirm with the official source or a lawyer before acting.",
+  proj:"Minor project · IPS Academy Indore · IoT"},
+ hi:{tag:"न्याय का सेतु",
+  h1:"अपने अधिकार जानें। अगला कदम जानें।",
+  lede:"जो हुआ, अपने शब्दों में लिखें। NyaySetu आपके अधिकार, क्या करें, किसे कॉल करें और कौन से कागज़ तैयार रखें, यह बताता है। मुफ़्त, निजी, हिंदी और अंग्रेज़ी में।",
+  askL:"क्या हुआ?",askP:"जैसे: मेरे मालिक ने 3 महीने से वेतन नहीं दिया",find:"मार्गदर्शन पाएँ",
+  eg:["पुलिस एफआईआर नहीं लिख रही","वेतन नहीं मिला","UPI ठगी में पैसे गए"],
+  stCat:"कानूनी विषय",stHelp:"राष्ट्रीय हेल्पलाइन",stDoc:"दस्तावेज़ जनरेटर",
+  matches:"आपकी समस्या से सबसे मिलते विषय",nomatch:"मिलान नहीं हो पाया। नीचे से सबसे नज़दीकी विषय चुनें।",browse:"सभी विषय",
+  back:"← सभी विषय",rights:"आपके अधिकार",law:"कानून, आसान शब्दों में",steps:"क्या करें",docs:"ये तैयार रखें",call:"मदद के लिए कॉल करें",
+  mkNotice:"कानूनी नोटिस तैयार करें",
+  tabs:["अधिकार","आपातकाल","दस्तावेज़","कानूनी सहायता","परिचय"],
+  emTitle:"आपातकालीन मदद",emSub:"कॉल करने के लिए नंबर दबाएँ। ये मुफ़्त, 24×7 राष्ट्रीय नंबर हैं।",
+  sosT:"लाइव लोकेशन के साथ SOS",sosD:"नीचे सहेजे गए भरोसेमंद संपर्कों को आपकी लोकेशन का लिंक भेजता है।",
+  sosGo:"मेरी लोकेशन लें और SOS तैयार करें",sosLoc:"आपकी लोकेशन ली जा रही है…",sosOk:"लोकेशन मिल गई। भेजने के लिए संपर्क चुनें।",
+  sosFail:"लोकेशन उपलब्ध नहीं है (अनुमति नहीं मिली या रोकी गई)। संदेश बिना लोकेशन के तैयार है।",
+  sosMsg:"आपातकाल! मुझे मदद चाहिए। मेरी लोकेशन: ",sosNoLoc:"आपातकाल! मुझे मदद चाहिए। मैं लोकेशन नहीं भेज पाया, कृपया मुझे कॉल करें।",
+  sosSig:" (NyaySetu से भेजा गया)",
+  tcT:"भरोसेमंद संपर्क",tcSub:"सिर्फ़ इसी डिवाइस पर सहेजे जाते हैं। अधिकतम 5।",nm:"नाम",ph:"फोन नंबर",add:"संपर्क जोड़ें",del:"हटाएँ",
+  noC:"अभी कोई संपर्क नहीं। SOS के लिए एक जोड़ें।",sms:"SMS",wa:"WhatsApp",share:"शेयर करें…",copy:"संदेश कॉपी करें",copied:"कॉपी हो गया",
+  docsT:"दस्तावेज़ बनाएँ",docsSub:"फ़ॉर्म भरें। टाइप करते ही मसौदा बदलता है। कुछ भी आपके डिवाइस से बाहर नहीं जाता।",
+  rti:"आरटीआई आवेदन",notice:"कानूनी नोटिस",dlang:"दस्तावेज़ की भाषा",
+  save:"PDF के रूप में सहेजें",copyDoc:"टेक्स्ट कॉपी करें",pdfHint:"प्रिंट विंडो में गंतव्य के रूप में “Save as PDF” चुनें।",printFail:"यहाँ प्रिंट रुका हुआ है। टेक्स्ट कॉपी करके किसी दस्तावेज़ में चिपकाएँ।",
+  draft:"मसौदा",
+  courtsT:"अदालतें और निःशुल्क कानूनी सहायता",courtsSub:"कौन सी अदालत क्या देखती है, और मुफ़्त कानूनी मदद कहाँ से शुरू होती है।",
+  whichCourt:"कौन सी अदालत?",ladder:"निःशुल्क कानूनी सहायता: कहाँ जाएँ",official:"सरकारी वेबसाइटें",filter:"वेबसाइट खोजें…",
+  aboutT:"NyaySetu के बारे में",
+  disc:"यह सामान्य जानकारी है, कानूनी सलाह नहीं। कानून बदलते हैं, इसलिए कदम उठाने से पहले आधिकारिक स्रोत या वकील से पुष्टि करें।",
+  proj:"माइनर प्रोजेक्ट · आईपीएस एकेडमी इंदौर · आईओटी"}
+};
+
+const COURTS={
+ en:[["Supreme Court","Final court of appeal, and constitutional questions."],
+  ["High Court","Appeals from district courts, and writs for fundamental rights (Art. 226)."],
+  ["District & Sessions Court","Main trial court for civil and criminal cases in your district."],
+  ["Family Court","Divorce, maintenance, custody."],
+  ["Consumer Commissions","District, State and National forums for goods and services complaints."],
+  ["Labour Court / Tribunal","Wage and employment disputes."],
+  ["Motor Accident Claims Tribunal","Compensation for road accidents."],
+  ["Lok Adalat","Free, quick settlement by agreement. The award is final."]],
+ hi:[["सर्वोच्च न्यायालय","अंतिम अपील अदालत और संवैधानिक प्रश्न।"],
+  ["उच्च न्यायालय","ज़िला अदालतों की अपील और मौलिक अधिकारों के लिए रिट (अनुच्छेद 226)।"],
+  ["ज़िला एवं सत्र न्यायालय","आपके ज़िले में दीवानी और फौजदारी मामलों की मुख्य अदालत।"],
+  ["परिवार न्यायालय","तलाक, भरण-पोषण, बच्चों की अभिरक्षा।"],
+  ["उपभोक्ता आयोग","सामान और सेवाओं की शिकायतों के लिए ज़िला, राज्य और राष्ट्रीय मंच।"],
+  ["श्रम न्यायालय / अधिकरण","वेतन और रोज़गार विवाद।"],
+  ["मोटर दुर्घटना दावा अधिकरण","सड़क दुर्घटना का मुआवज़ा।"],
+  ["लोक अदालत","आपसी सहमति से मुफ़्त, तेज़ समाधान। फैसला अंतिम होता है।"]]
+};
+const LADDER={
+ en:[["NALSA (national)","Sets policy and runs the 15100 helpline."],["State Legal Services Authority","Coordinates legal aid in your state."],["District Legal Services Authority (DLSA)","At the district court complex. Your first stop."],["Taluk Legal Services Committee","Legal aid at sub-district level."],["High Court / Supreme Court Legal Services Committees","Free aid for cases in those courts."]],
+ hi:[["नालसा (राष्ट्रीय)","नीति तय करता है और 15100 हेल्पलाइन चलाता है।"],["राज्य विधिक सेवा प्राधिकरण","आपके राज्य में कानूनी सहायता का समन्वय।"],["ज़िला विधिक सेवा प्राधिकरण (DLSA)","ज़िला न्यायालय परिसर में। यहीं से शुरू करें।"],["तालुका विधिक सेवा समिति","उप-ज़िला स्तर पर सहायता।"],["उच्च न्यायालय / सर्वोच्च न्यायालय विधिक सेवा समितियाँ","उन अदालतों के मामलों में निःशुल्क सहायता।"]]
+};
+const LINKS=[
+ ["https://nalsa.gov.in","NALSA","Free legal aid, find legal services authorities","नालसा","निःशुल्क कानूनी सहायता, विधिक सेवा प्राधिकरण"],
+ ["https://ecourts.gov.in","eCourts Services","Case status, cause lists, court orders","ई-कोर्ट सेवाएँ","केस की स्थिति, कॉज़ लिस्ट, अदालती आदेश"],
+ ["https://www.indiacode.nic.in","India Code","Central and State Acts","इंडिया कोड","केंद्रीय और राज्य अधिनियम"],
+ ["https://rtionline.gov.in","RTI Online","File RTI to central ministries","आरटीआई ऑनलाइन","केंद्रीय मंत्रालयों में आरटीआई दायर करें"],
+ ["https://cybercrime.gov.in","National Cyber Crime Reporting Portal","Report online fraud and cyber crime","राष्ट्रीय साइबर अपराध रिपोर्टिंग पोर्टल","ऑनलाइन ठगी और साइबर अपराध की शिकायत"],
+ ["https://consumerhelpline.gov.in","National Consumer Helpline","Consumer complaints and mediation","राष्ट्रीय उपभोक्ता हेल्पलाइन","उपभोक्ता शिकायत और मध्यस्थता"]
+];
+
+/* ---------- state ---------- */
+const today=()=>{const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+const S={
+ tab:"rights",cat:null,q:"",results:null,
+ lang:store.get("ns_lang","en"),theme:store.get("ns_theme","auto"),hc:store.get("ns_hc",false),
+ contacts:store.get("ns_contacts",[]),
+ sos:{status:"",msg:"",ready:false},
+ docType:"rti",docLang:null,
+ f:{rti:{date:today()},notice:{date:today(),days:"15"}},
+ cf:""
+};
+const L=()=>S.lang, u=k=>U[S.lang][k];
+const $=s=>document.querySelector(s);
+
+/* ---------- apply prefs ---------- */
+function applyPrefs(){
+  const r=document.documentElement;
+  if(S.theme==="auto")r.removeAttribute("data-theme");else r.setAttribute("data-theme",S.theme);
+  if(S.hc)r.setAttribute("data-contrast","high");else r.removeAttribute("data-contrast");
+  r.lang=S.lang==="hi"?"hi":"en";
+  $("#b-lang").textContent=S.lang==="en"?"हिं":"EN";
+  $("#b-lang").setAttribute("aria-label",S.lang==="en"?"हिंदी में बदलें":"Switch to English");
+  $("#b-hc").setAttribute("aria-pressed",String(S.hc));
+  $("#b-hc").setAttribute("aria-label",S.lang==="hi"?"उच्च कंट्रास्ट":"High contrast");
+  const dark=effectiveDark();
+  $("#b-theme").setAttribute("aria-pressed",String(dark));
+  $("#b-theme").setAttribute("aria-label",S.lang==="hi"?"डार्क मोड":"Dark mode");
+  $("#tag").textContent=u("tag");
+}
+function effectiveDark(){
+  if(S.theme==="dark")return true; if(S.theme==="light")return false;
+  return window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
+/* ---------- search (rule-based keyword match) ---------- */
+function search(q){
+  const s=q.toLowerCase();
+  const scored=CATS.map(c=>({c,n:c.kw.reduce((a,k)=>a+(s.includes(k.toLowerCase())?1:0),0)})).filter(x=>x.n>0);
+  scored.sort((a,b)=>b.n-a.n);
+  return scored.slice(0,3).map(x=>x.c);
+}
+
+/* ---------- views ---------- */
+function indexList(list){
+  return `<ul class="index">${list.map(c=>`<li><button data-act="cat" data-id="${c.id}"><span><span class="t">${esc(c[L()].title)}</span><span class="d">${esc(c[L()].desc)}</span></span><span class="go" aria-hidden="true">›</span></button></li>`).join("")}</ul>`;
+}
+function bridgeSVG(){
+  return `<svg class="bridge" viewBox="0 0 700 90" role="img" aria-label="${S.lang==="hi"?"सेतु":"Bridge"}"><path class="arc" d="M10 70 C 120 -10, 580 -10, 690 70" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"/><g stroke="currentColor" stroke-width="2" opacity=".55">${[90,150,210,270,330,390,450,510,570,620].map(x=>{const y=70-Math.sin((x-10)/680*Math.PI)*58*1.0;return `<line x1="${x}" y1="${(y+8).toFixed(1)}" x2="${x}" y2="72"/>`}).join("")}</g><line x1="0" y1="72" x2="700" y2="72" stroke="currentColor" stroke-width="4"/><circle cx="10" cy="70" r="6" fill="var(--accent)"/><circle cx="690" cy="70" r="6" fill="var(--accent)"/></svg>`;
+}
+function vRights(){
+  if(S.cat){
+    const c=CATS.find(x=>x.id===S.cat),d=c[L()];
+    return `<section class="detail">
+      <button class="back" data-act="uncat">${u("back")}</button>
+      <h1>${esc(d.title)}</h1><p class="sub">${esc(d.desc)}</p>
+      <div class="block"><h3>${u("rights")}</h3><ul>${d.rights.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      <h3>${u("law")}</h3><div class="law">${esc(d.law)}</div>
+      <div class="block"><h3>${u("steps")}</h3><ol>${d.steps.map(x=>`<li>${esc(x)}</li>`).join("")}</ol></div>
+      <div class="block"><h3>${u("docs")}</h3><ul>${d.docs.map(x=>`<li>${esc(x)}</li>`).join("")}</ul></div>
+      <h3>${u("call")}</h3>
+      <div class="helps">${c.help.map(n=>`<a href="tel:${n}"><b>${n}</b><span>${esc(HELP[n][L()])}</span></a>`).join("")}</div>
+      ${c.doc?`<div class="row"><button class="btn" data-act="mknotice" data-id="${c.id}">${u("mkNotice")}</button></div>`:""}
+      <footer class="foot">${u("disc")}</footer>
+    </section>`;
+  }
+  let res="";
+  if(S.results!==null){
+    res=S.results.length
+      ? `<h2>${u("matches")}</h2><div class="match">${indexList(S.results)}</div>`
+      : `<p class="sub" style="margin-top:16px">${u("nomatch")}</p>`;
+  }
+  return `<section class="hero">
+    <h1>${u("h1")}</h1>
+    <p class="lede">${u("lede")}</p>
+    ${bridgeSVG()}
+    <div class="ask" style="margin-top:14px">
+      <label for="q">${u("askL")}</label>
+      <textarea id="q" placeholder="${esc(u("askP"))}">${esc(S.q)}</textarea>
+      <div class="row"><button class="btn" data-act="find">${u("find")}</button>
+        ${U[L()].eg.map((e,i)=>`<button class="chip" data-act="eg" data-i="${i}">${esc(e)}</button>`).join("")}</div>
+    </div>
+    <div class="stats"><span><b>${CATS.length}</b>${u("stCat")}</span><span><b>${Object.keys(HELP).length}</b>${u("stHelp")}</span><span><b>2</b>${u("stDoc")}</span></div>
+  </section>
+  ${res}
+  <h2>${u("browse")}</h2>${indexList(CATS)}
+  <footer class="foot">${u("disc")}</footer>`;
+}
+
+function vEmergency(){
+  const keys=Object.keys(HELP);
+  return `<h2 style="margin-top:22px">${u("emTitle")}</h2><p class="sub">${u("emSub")}</p>
+  <div class="hl">${keys.map((n,i)=>`<a href="tel:${n}" class="${i===0?"main":""}"><b>${n}</b><span>${esc(HELP[n][L()])}</span></a>`).join("")}</div>
+
+  <div class="sos"><h3 style="margin-top:0">${u("sosT")}</h3><p class="sub">${u("sosD")}</p>
+    <button class="btn danger" data-act="sos">${u("sosGo")}</button>
+    <p class="status" id="sosStatus" role="status">${esc(S.sos.status)}</p>
+    <div id="sosOut">${sosOut()}</div>
+  </div>
+
+  <h2>${u("tcT")}</h2><p class="sub">${u("tcSub")}</p>
+  <div id="contacts">${contactsHTML()}</div>
+  ${S.contacts.length<5?`<div class="two" style="margin-top:12px">
+    <label class="field"><span>${u("nm")}</span><input id="cn" autocomplete="off"></label>
+    <label class="field"><span>${u("ph")}</span><input id="cp" inputmode="tel" autocomplete="off" placeholder="+91 98XXXXXXXX"></label></div>
+  <button class="btn alt" data-act="addc">${u("add")}</button>`:""}
+  <footer class="foot">${u("disc")}</footer>`;
+}
+function contactsHTML(){
+  if(!S.contacts.length)return `<p class="note">${u("noC")}</p>`;
+  return S.contacts.map((c,i)=>`<div class="contact"><span><b>${esc(c.name)}</b><br><span class="note">${esc(c.phone)}</span></span><button class="btn alt sm" data-act="delc" data-i="${i}">${u("del")}</button></div>`).join("");
+}
+function sosOut(){
+  if(!S.sos.ready)return "";
+  const m=encodeURIComponent(S.sos.msg);
+  const norm=p=>{let d=p.replace(/[^\d+]/g,"");return d};
+  const wa=p=>{let d=p.replace(/\D/g,"");if(d.length===10)d="91"+d;return d};
+  const rows=S.contacts.map(c=>`<div class="contact"><b>${esc(c.name)}</b><span class="row" style="margin:0">
+     <a class="btn sm" href="sms:${esc(norm(c.phone))}?body=${m}">${u("sms")}</a>
+     <a class="btn sm alt" target="_blank" rel="noopener" href="https://wa.me/${wa(c.phone)}?text=${m}">${u("wa")}</a></span></div>`).join("");
+  return `<div class="msgbox">${esc(S.sos.msg)}</div>
+   <div class="row"><a class="btn danger sm" href="tel:112">112</a>
+   ${navigator.share?`<button class="btn alt sm" data-act="shareSos">${u("share")}</button>`:""}
+   <button class="btn alt sm" data-act="copySos">${u("copy")}</button></div>${rows}`;
+}
+
+/* documents */
+const FL={
+ en:{name:"Your name",address:"Your address",contact:"Phone / email",authority:"Public authority / department",authAddr:"Authority address",info:"Information you want",period:"Period (optional)",bpl:"I am Below Poverty Line (no fee)",place:"Place",date:"Date",
+     recipient:"Recipient name",recipAddr:"Recipient address",subject:"Subject",facts:"What happened (facts)",demand:"What you demand",amount:"Amount (optional, ₹)",days:"Days to comply"},
+ hi:{name:"आपका नाम",address:"आपका पता",contact:"फोन / ईमेल",authority:"लोक प्राधिकारी / विभाग",authAddr:"प्राधिकारी का पता",info:"चाही गई जानकारी",period:"अवधि (वैकल्पिक)",bpl:"मैं गरीबी रेखा से नीचे हूँ (शुल्क नहीं)",place:"स्थान",date:"दिनांक",
+     recipient:"प्राप्तकर्ता का नाम",recipAddr:"प्राप्तकर्ता का पता",subject:"विषय",facts:"क्या हुआ (तथ्य)",demand:"आपकी माँग",amount:"राशि (वैकल्पिक, ₹)",days:"पालन के दिन"}
+};
+const dl=()=>S.docLang||S.lang;
+const RTI_FIELDS=[["name","text"],["address","textarea"],["contact","text"],["authority","text"],["authAddr","textarea"],["info","textarea"],["period","text"],["bpl","check"],["place","text"],["date","date"]];
+const NOT_FIELDS=[["name","text"],["address","textarea"],["contact","text"],["recipient","text"],["recipAddr","textarea"],["subject","text"],["facts","textarea"],["demand","textarea"],["amount","text"],["days","number"],["place","text"],["date","date"]];
+function fmtDate(iso){if(!iso)return"";const p=iso.split("-");return p.length===3?`${p[2]}/${p[1]}/${p[0]}`:iso}
+function buildDoc(){
+  const lg=dl(), lab=FL[lg], v=S.f[S.docType];
+  const g=k=>{const x=(v[k]||"").trim();return x||`[${lab[k]}]`};
+  const date=fmtDate(v.date)||`[${lab.date}]`;
+  if(S.docType==="rti"){
+    if(lg==="hi"){
+      return `सेवा में,
+जन सूचना अधिकारी (PIO),
+${g("authority")}
+${g("authAddr")}
+
+दिनांक: ${date}
+स्थान: ${g("place")}
+
+विषय: सूचना का अधिकार अधिनियम, 2005 की धारा 6(1) के अंतर्गत सूचना हेतु आवेदन
+
+महोदय / महोदया,
+
+मैं, ${g("name")}, निवासी ${g("address")}, सूचना का अधिकार अधिनियम, 2005 के अंतर्गत निम्नलिखित जानकारी चाहता/चाहती हूँ।
+${(v.period||"").trim()?`\nअवधि: ${v.period.trim()}\n`:""}
+चाही गई जानकारी:
+${g("info")}
+
+${v.bpl?"मैं गरीबी रेखा से नीचे (BPL) श्रेणी में आता/आती हूँ, इसलिए आवेदन शुल्क से मुक्त हूँ। BPL प्रमाणपत्र की प्रति संलग्न है।":"आवेदन शुल्क (केंद्र सरकार के लिए ₹10; राज्यों में शुल्क भिन्न हो सकता है) संलग्न है / ऑनलाइन जमा किया गया है।"}
+
+यदि यह जानकारी किसी अन्य लोक प्राधिकारी से संबंधित है, तो कृपया धारा 6(3) के अंतर्गत आवेदन स्थानांतरित कर मुझे सूचित करें। यदि कोई जानकारी अस्वीकार की जाती है, तो कृपया धारा 7(8) के अनुसार कारण और अपील प्राधिकारी का विवरण दें।
+
+कृपया धारा 7(1) के अनुसार 30 दिन के भीतर जानकारी उपलब्ध कराएँ।
+
+भवदीय,
+${g("name")}
+${g("address")}
+फोन / ईमेल: ${g("contact")}`;
+    }
+    return `To,
+The Public Information Officer (PIO),
+${g("authority")}
+${g("authAddr")}
+
+Date: ${date}
+Place: ${g("place")}
+
+Subject: Application for information under Section 6(1) of the Right to Information Act, 2005
+
+Sir/Madam,
+
+I, ${g("name")}, resident of ${g("address")}, request the following information under the Right to Information Act, 2005.
+${(v.period||"").trim()?`\nPeriod: ${v.period.trim()}\n`:""}
+Information sought:
+${g("info")}
+
+${v.bpl?"I belong to the Below Poverty Line (BPL) category and am exempt from the application fee. A copy of my BPL certificate is enclosed.":"I am enclosing the application fee (₹10 for central government bodies; the fee varies by state) / have paid it online."}
+
+If this information relates to another public authority, please transfer this application under Section 6(3) and inform me. If any part is refused, please give the reasons and the details of the appellate authority as required by Section 7(8).
+
+Please provide the information within 30 days as required by Section 7(1).
+
+Yours faithfully,
+${g("name")}
+${g("address")}
+Phone / email: ${g("contact")}`;
+  }
+  const amt=(v.amount||"").trim(), days=(v.days||"").trim()||"15";
+  if(lg==="hi"){
+    return `कानूनी नोटिस
+(रजिस्टर्ड डाक A.D. / स्पीड पोस्ट / ईमेल द्वारा)
+
+दिनांक: ${date}
+स्थान: ${g("place")}
+
+सेवा में,
+${g("recipient")}
+${g("recipAddr")}
+
+विषय: ${g("subject")}
+
+महोदय / महोदया,
+
+मैं, ${g("name")}, निवासी ${g("address")}, इस नोटिस द्वारा आपको निम्नलिखित सूचित करता/करती हूँ।
+
+1. तथ्य
+${g("facts")}
+
+2. माँग
+${g("demand")}
+${amt?`\nबकाया राशि: ₹${amt}\n`:""}
+आपको इस नोटिस की प्राप्ति से ${days} दिन के भीतर उपरोक्त माँग का पालन करना है। ऐसा न करने पर मुझे आपके विरुद्ध आपके व्यय और जोखिम पर दीवानी और/या फौजदारी कानूनी कार्रवाई करनी होगी, जिसमें ब्याज और खर्च सहित राशि की वसूली शामिल है।
+
+यह नोटिस मेरे अन्य अधिकारों और उपायों पर प्रतिकूल प्रभाव डाले बिना जारी किया जाता है।
+
+भवदीय,
+${g("name")}
+${g("address")}
+संपर्क: ${g("contact")}`;
+  }
+  return `LEGAL NOTICE
+(By Registered Post A.D. / Speed Post / Email)
+
+Date: ${date}
+Place: ${g("place")}
+
+To,
+${g("recipient")}
+${g("recipAddr")}
+
+Subject: ${g("subject")}
+
+Sir/Madam,
+
+I, ${g("name")}, resident of ${g("address")}, give you this notice and state as follows.
+
+1. Facts
+${g("facts")}
+
+2. Demand
+${g("demand")}
+${amt?`\nAmount due: ₹${amt}\n`:""}
+You are called upon to comply with the above demand within ${days} days of receiving this notice. If you fail to do so, I will be forced to take legal action, civil and/or criminal, against you at your cost and risk, including recovery of the amount with interest and costs.
+
+This notice is issued without prejudice to my other rights and remedies.
+
+Yours faithfully,
+${g("name")}
+${g("address")}
+Contact: ${g("contact")}`;
+}
+function formHTML(){
+  const fields=S.docType==="rti"?RTI_FIELDS:NOT_FIELDS, lab=FL[dl()], v=S.f[S.docType];
+  const html=fields.map(([k,t])=>{
+    if(t==="check")return `<label class="check"><input type="checkbox" data-f="${k}" ${v[k]?"checked":""}><span>${esc(lab[k])}</span></label>`;
+    if(t==="textarea")return `<label class="field"><span>${esc(lab[k])}</span><textarea data-f="${k}">${esc(v[k]||"")}</textarea></label>`;
+    return `<label class="field"><span>${esc(lab[k])}</span><input data-f="${k}" type="${t}" ${t==="number"?'min="1" inputmode="numeric"':""} value="${esc(v[k]||"")}"></label>`;
+  });
+  return `<div class="two">${html.join("")}</div>`;
+}
+function vDocs(){
+  return `<div class="noprint"><h2 style="margin-top:22px">${u("docsT")}</h2><p class="sub">${u("docsSub")}</p>
+  <div class="seg" role="group">
+    <button data-act="dtype" data-t="rti" aria-pressed="${S.docType==="rti"}">${u("rti")}</button>
+    <button data-act="dtype" data-t="notice" aria-pressed="${S.docType==="notice"}">${u("notice")}</button></div>
+  <label class="field"><span>${u("dlang")}</span><select id="dlang"><option value="en" ${dl()==="en"?"selected":""}>English</option><option value="hi" ${dl()==="hi"?"selected":""}>हिंदी</option></select></label>
+  <div id="form">${formHTML()}</div>
+  <h3>${u("draft")}</h3></div>
+  <div class="doc-paper" id="paper"></div>
+  <div class="row noprint"><button class="btn" data-act="print">${u("save")}</button><button class="btn alt" data-act="copydoc">${u("copyDoc")}</button></div>
+  <p class="note noprint" id="docMsg">${u("pdfHint")}</p>
+  <footer class="foot noprint">${u("disc")}</footer>`;
+}
+
+function vCourts(){
+  const lk=LINKS.map(l=>{const i=L()==="hi"?[3,4]:[1,2];return `<a href="${l[0]}" target="_blank" rel="noopener" data-s="${esc((l[1]+" "+l[2]+" "+l[3]+" "+l[4]).toLowerCase())}">${esc(l[i[0]])}<span>${esc(l[i[1]])} · ${esc(l[0].replace("https://",""))}</span></a>`}).join("");
+  return `<h2 style="margin-top:22px">${u("courtsT")}</h2><p class="sub">${u("courtsSub")}</p>
+  <h3>${u("whichCourt")}</h3>
+  <ul class="index">${COURTS[L()].map(c=>`<li style="padding:12px 2px"><span class="t">${esc(c[0])}</span><span class="d">${esc(c[1])}</span></li>`).join("")}</ul>
+  <h3 style="margin-top:28px">${u("ladder")}</h3>
+  <ul class="ladder">${LADDER[L()].map(c=>`<li><b>${esc(c[0])}</b>${esc(c[1])}</li>`).join("")}</ul>
+  <div class="row"><a class="btn" href="tel:15100">15100</a></div>
+  <h3 style="margin-top:28px">${u("official")}</h3>
+  <input class="search" id="lf" placeholder="${esc(u("filter"))}" aria-label="${esc(u("filter"))}">
+  <div class="links" id="links">${lk}</div>
+  <footer class="foot">${u("disc")}</footer>`;
+}
+
+function vAbout(){
+  const en=L()==="en";
+  const fut=en?["Live, auto-updated data from official government websites","AI-based case analysis (Gemini / Sarvam AI)","Voice input in regional languages","User login and saved cases","More legal categories and cities"]
+              :["सरकारी वेबसाइटों से लाइव, अपने-आप अपडेट होने वाला डेटा","एआई-आधारित केस विश्लेषण (Gemini / Sarvam AI)","क्षेत्रीय भाषाओं में आवाज़ से इनपुट","यूज़र लॉगिन और सहेजे गए केस","अधिक कानूनी श्रेणियाँ और शहर"];
+  return `<h2 style="margin-top:22px">${u("aboutT")}</h2>
+  <p>${en?"NyaySetu means “Bridge to Justice”. It is a free website that connects citizens to their legal rights, so that a first step is never a guess.":"NyaySetu का अर्थ है “न्याय का सेतु”। यह एक मुफ़्त वेबसाइट है जो नागरिकों को उनके कानूनी अधिकारों से जोड़ती है, ताकि पहला कदम अंदाज़े पर न हो।"}</p>
+  <h3>${en?"How it works":"यह कैसे काम करता है"}</h3>
+  <p>${en?"Your words are matched to one of 11 issue categories using rules and curated legal content. Nothing is sent to a server. AI-based case analysis is planned as future scope.":"आपके शब्दों को नियमों और तैयार कानूनी सामग्री से 11 विषयों में से एक से मिलाया जाता है। कुछ भी सर्वर पर नहीं भेजा जाता। एआई-आधारित केस विश्लेषण भविष्य की योजना है।"}</p>
+  <h3>${en?"Privacy":"गोपनीयता"}</h3>
+  <p>${en?"Saved contacts and your preferences stay in this browser. Documents you draft are never uploaded.":"सहेजे गए संपर्क और आपकी पसंद इसी ब्राउज़र में रहती हैं। आपके बनाए दस्तावेज़ कभी अपलोड नहीं होते।"}</p>
+  <h3>${en?"Planned next":"आगे की योजना"}</h3>
+  <ul>${fut.map(x=>`<li>${esc(x)}</li>`).join("")}</ul>
+  <h3>${en?"Project team":"प्रोजेक्ट टीम"}</h3>
+  <p style="margin:0">Dhiraj Kumar (0808IO241020)<br>Gaurav Vyas (0808IO241023)<br>Aavesh Patel (0808IO241002)</p>
+  <p class="note">${en?"Guided by Vijay Mandle":"मार्गदर्शक: विजय मंडले"}</p>
+  <footer class="foot">${u("disc")}<br>${u("proj")}</footer>`;
+}
+
+/* ---------- render ---------- */
+const TABS=["rights","sos","docs","aid","about"];
+function render(){
+  applyPrefs();
+  $("#tabs").innerHTML=TABS.map((t,i)=>`<button data-act="tab" data-t="${t}" class="${t==="sos"?"sosb":""}" ${S.tab===t?'aria-current="page"':""}>${U[L()].tabs[i]}</button>`).join("");
+  const m=$("#main");
+  m.innerHTML=({rights:vRights,sos:vEmergency,docs:vDocs,aid:vCourts,about:vAbout})[S.tab]();
+  if(S.tab==="docs")updatePaper();
+}
+function updatePaper(){const p=$("#paper");if(p)p.textContent=buildDoc()}
+function go(tab){S.tab=tab;S.cat=null;render();window.scrollTo(0,0)}
+
+/* ---------- SOS ---------- */
+function buildSos(lat,lng){
+  S.sos.msg = lat==null ? u("sosNoLoc")+u("sosSig")
+    : u("sosMsg")+`https://maps.google.com/?q=${lat},${lng}`+u("sosSig");
+  S.sos.ready=true;
+}
+function startSos(){
+  S.sos.status=u("sosLoc");S.sos.ready=false;render();
+  const fail=()=>{buildSos(null);S.sos.status=u("sosFail");render()};
+  try{
+    if(!navigator.geolocation)return fail();
+    navigator.geolocation.getCurrentPosition(
+      p=>{buildSos(p.coords.latitude.toFixed(6),p.coords.longitude.toFixed(6));S.sos.status=u("sosOk");render()},
+      fail,{enableHighAccuracy:true,timeout:10000,maximumAge:30000});
+  }catch(e){fail()}
+}
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();const ok=document.execCommand("copy");a.remove();return ok}catch(e){return false}
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click",async e=>{
+  const el=e.target.closest("[data-act]");if(!el)return;
+  const a=el.dataset.act;
+  if(a==="home"){S.results=null;go("rights")}
+  else if(a==="tab")go(el.dataset.t);
+  else if(a==="lang"){S.lang=S.lang==="en"?"hi":"en";S.docLang=null;store.set("ns_lang",S.lang);render()}
+  else if(a==="theme"){S.theme=effectiveDark()?"light":"dark";store.set("ns_theme",S.theme);render()}
+  else if(a==="contrast"){S.hc=!S.hc;store.set("ns_hc",S.hc);render()}
+  else if(a==="cat"){S.cat=el.dataset.id;render();window.scrollTo(0,0)}
+  else if(a==="uncat"){S.cat=null;render();window.scrollTo(0,0)}
+  else if(a==="find"){const q=$("#q");S.q=q?q.value:"";S.results=S.q.trim()?search(S.q):null;render();const r=document.querySelector(".match, .sub[style]");if(r)r.scrollIntoView({block:"center"})}
+  else if(a==="eg"){S.q=U[L()].eg[+el.dataset.i];S.results=search(S.q);render()}
+  else if(a==="mknotice"){const c=CATS.find(x=>x.id===el.dataset.id);S.docType="notice";if(!(S.f.notice.subject||"").trim())S.f.notice.subject=c[dl()].title;S.tab="docs";S.cat=null;render();window.scrollTo(0,0)}
+  else if(a==="dtype"){S.docType=el.dataset.t;render()}
+  else if(a==="print"){try{window.print()}catch(x){$("#docMsg").textContent=u("printFail")}}
+  else if(a==="copydoc"){const ok=await copyText(buildDoc());$("#docMsg").textContent=ok?u("copied"):u("printFail")}
+  else if(a==="sos")startSos();
+  else if(a==="copySos"){const ok=await copyText(S.sos.msg);el.textContent=ok?u("copied"):u("copy")}
+  else if(a==="shareSos"){try{await navigator.share({text:S.sos.msg})}catch(x){}}
+  else if(a==="addc"){
+    const n=($("#cn").value||"").trim(),p=($("#cp").value||"").trim();
+    if(n&&p.replace(/\D/g,"").length>=8&&S.contacts.length<5){S.contacts.push({name:n,phone:p});store.set("ns_contacts",S.contacts);render()}
+  }
+  else if(a==="delc"){S.contacts.splice(+el.dataset.i,1);store.set("ns_contacts",S.contacts);render()}
+});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.f){S.f[S.docType][t.dataset.f]=t.type==="checkbox"?t.checked:t.value;updatePaper()}
+  else if(t.id==="lf"){const s=t.value.toLowerCase().trim();document.querySelectorAll("#links a").forEach(a=>{a.style.display=a.dataset.s.includes(s)?"":"none"})}
+});
+document.addEventListener("change",e=>{
+  const t=e.target;
+  if(t.dataset&&t.dataset.f&&t.type==="checkbox"){S.f[S.docType][t.dataset.f]=t.checked;updatePaper()}
+  if(t.id==="dlang"){S.docLang=t.value;render()}
+});
+render();
+</script>
+</body>
+</html>
